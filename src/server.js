@@ -5,35 +5,46 @@ const PORTA = 3000;
 
 app.use(express.json());
 
-const tarefas = [
-  { id: 1, titulo: "Estudar Node", concluida: false },
-  { id: 2, titulo: "Fazer telas no Figma", concluida: true }
+// Array em memória
+const livros = [
+  { id: 1, titulo: "A marca de Atena", autor: "Rick Riordan" },
+  { id: 2, titulo: "Psicologia investigativa", autor: "Dennis Lino" }
 ];
 
-app.get("/tarefas", (req, res) => {
-  res.status(200).json(tarefas);
+// 🔹 ROTA GET - listar livros
+app.get("/livros", (req, res) => {
+  res.status(200).json(livros);
 });
 
-app.post("/tarefas", (req, res) => {
-  const { titulo } = req.body;
+// 🔹 ROTA POST - criar novo livro
+app.post("/livros", (req, res) => {
+  const { titulo, autor } = req.body;
 
+  // Validação
   if (!titulo || titulo.trim() === "") {
     return res.status(400).json({
       erro: "Título é obrigatório."
     });
   }
 
-  const novaTarefa = {
-    id: tarefas.length + 1,
+  if (!autor || autor.trim() === "") {
+    return res.status(400).json({
+      erro: "Autor é obrigatório."
+    });
+  }
+
+  const novoLivro = {
+    id: livros.length + 1,
     titulo,
-    concluida: false
+    autor
   };
 
-  tarefas.push(novaTarefa);
+  livros.push(novoLivro);
 
-  res.status(201).json(novaTarefa);
+  res.status(201).json(novoLivro);
 });
 
+// Iniciar servidor
 app.listen(PORTA, () => {
   console.log(`Servidor rodando em http://localhost:${PORTA}`);
 });
